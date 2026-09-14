@@ -5,7 +5,7 @@
 
 int main() {
     
-    FILE *file = fopen("data/testBase4.dat", "rb");
+    FILE *file = fopen("../data/testBase4.dat", "rb");
     if(file == NULL){
         std::cout << "Ошибка чтения файла\n";
         return 1;
@@ -25,8 +25,10 @@ int main() {
     }
     
     std::cout << "Файл успешно прочитан. В список добавлено " << count << " записей\n";
+    
 
     fclose(file);
+    print_list(head);
     memory_clear(head);
 
     return 0;
