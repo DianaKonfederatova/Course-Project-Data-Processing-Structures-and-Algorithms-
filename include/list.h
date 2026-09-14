@@ -10,5 +10,7 @@ struct ListNode{
 
 void addList(ListNode*& head, const addresses& newData);
 void memory_clear(ListNode*& head);
+void transcodingCP866_for_UTF8(const char* str, int len);
+void print_list (ListNode* head);
 
 #endif
