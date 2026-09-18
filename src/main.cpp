@@ -28,6 +28,7 @@ int main() {
     
 
     fclose(file);
+    mergeSort(head, 4000);
     print_list(head);
     memory_clear(head);
 

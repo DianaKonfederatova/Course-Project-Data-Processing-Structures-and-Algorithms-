@@ -159,3 +159,158 @@ int compareStrings(const char* str1, const char* str2) {
     return (unsigned char)str1[i] - (unsigned char)str2[i];
 }
 
+int street_comparison_house_number(const addresses& r1, const addresses& r2){
+    int street_comp = compareStrings(r1.street, r2.street);
+
+    if(street_comp != 0){
+        return street_comp;
+    }else{
+        return r1.number_house - r2.number_house;
+    }
+}
+
+void queue_init(Queue& q){
+    q.head = nullptr;
+    q.tail = nullptr;
+}
+
+void add_node_queue(Queue& q, ListNode* node){
+    if (node == nullptr) return;
+    node -> next = nullptr;
+    
+    if(q.head == nullptr){
+        q.head = node;
+        q.tail = node;
+    }else{
+        q.tail -> next = node;
+        q.tail = node;
+    }
+
+}
+
+ListNode* nodefrom_thebeginning_list(ListNode*& list){
+
+    if(list == nullptr){
+        return nullptr;
+    }
+
+    ListNode* node = list;
+    list = list -> next;
+    node -> next = nullptr;
+
+    return node;
+}
+
+void merging_of_series(ListNode*& a, int q, ListNode*& b, int r, Queue& c){
+    while (q > 0 && r > 0 && a != nullptr && b != nullptr){
+        if (street_comparison_house_number(a->data, b->data) <= 0) {
+            ListNode* node = nodefrom_thebeginning_list(a);
+            add_node_queue(c, node);
+            q--;
+        } else {
+            ListNode* node = nodefrom_thebeginning_list(b);
+            add_node_queue(c, node);
+            r--;
+        }
+    }
+    
+    while (q > 0 && a != nullptr) {
+        ListNode* node = nodefrom_thebeginning_list(a);
+        add_node_queue(c, node);
+        q--;
+    }
+    
+    while (r > 0 && b != nullptr) {
+        ListNode* node = nodefrom_thebeginning_list(b);
+        add_node_queue(c, node);
+        r--;
+    }
+}
+
+void add_to_end(ListNode*& list, ListNode* node) {
+    node->next = nullptr;
+    
+    if (list == nullptr) {
+        list = node;
+    } else {
+        ListNode* temp = list;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = node;
+    }
+}
+
+void split_list(ListNode* S, ListNode*& a, ListNode*& b){
+    a = nullptr;
+    b = nullptr;
+    bool flag_add_to_a = true;
+
+    while(S != nullptr){
+        ListNode* node = nodefrom_thebeginning_list(S);
+
+        if(flag_add_to_a){
+            add_to_end(a, node);
+        }else{
+            add_to_end(b, node);
+        }
+
+        flag_add_to_a = false;
+    }
+}
+
+void mergeSort(ListNode*& S, int n) {
+    ListNode* a;
+    ListNode* b;
+    split_list(S, a, b);
+
+    Queue c0, c1;
+    queue_init(c0);
+    queue_init(c1);
+
+    int p = 1;
+    
+    while (p < n) {
+        queue_init(c0);
+        queue_init(c1);
+
+        int i = 0;
+        int m = n;
+
+        while (m > 0) {
+            
+            int q;
+            if (m >= p) { q = p; } else { q = m; }
+            
+            m = m - q;
+
+            int r;
+            if (m >= p) { r = p; } else { r = m; }
+            
+            m = m - r;
+
+            if (i == 0) {
+                merging_of_series(a, q, b, r, c0);
+            } else {
+                merging_of_series(a, q, b, r, c1);
+            }
+
+            i = 1 - i;
+        }
+
+        a = c0.head;
+        b = c1.head;
+
+        p = p * 2;
+    }
+
+    if (c0.tail != nullptr) {
+        c0.tail->next = nullptr;
+    }
+
+    S = c0.head;
+
+    c0.tail->next = nullptr;
+    
+    S = c0.head;
+}
