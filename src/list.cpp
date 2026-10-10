@@ -342,3 +342,25 @@ int compareFirst_Chars(const char* str1, const char* str2, int n){
     }
     return 0;
 }
+
+int binary_search(ListNode** index_array, int n, const char* key_search){
+    int L = 0;
+    int R = n - 1;
+
+    while(L < R){
+        int middle = (L + R) / 2;
+
+        if(compareFirst_Chars(index_array[middle]->data.street, key_search, 3) < 0){
+            L = middle + 1;
+        }else{
+            R = middle;
+        }
+    }
+
+    if(compareFirst_Chars(index_array[R]->data.street, key_search, 3) == 0){
+        return R;
+    }else{
+        return -1;
+    }
+
+}
