@@ -104,26 +104,39 @@ void transcodingCP866_for_UTF8(const char* str, int len) {
 
 void print_list(ListNode* head){
     int record_counter = 0;
+    int total_counter = 1; 
+    int page_number = 1; 
     ListNode* temp = head;
     bool exit = false;
 
     while(temp != nullptr){
+
+        if(record_counter == 0){
+            std::cout << "\n Страница" << page_number << "\n\n";
+        }
+
+        std::cout << total_counter << ". ";
         transcodingCP866_for_UTF8(temp->data.name, 32);
-        std::cout << "\n";
+        std::cout << "\t";
+        
         transcodingCP866_for_UTF8(temp->data.street, 18);
-        std::cout << "\n";
-        std::cout << temp->data.number_house << "\n";
-        std::cout << temp->data.apartment << "\n";
+        std::cout << "\t";
+        
+        std::cout << temp->data.number_house << "\t";
+        std::cout << temp->data.apartment << "\t";
+        
         transcodingCP866_for_UTF8(temp->data.date_of_settlement, 10);
-        std::cout << "\n\n";
+        
+        std::cout << "\n";
 
         record_counter++;
+        total_counter++;
         temp = temp -> next;
 
         if(record_counter == 20 && temp != nullptr){
 
             int answer;
-            std::cout << "Смотреть записи дальше? 1 - продолжаем просмотр, 2 - отказ от просмотра\n";
+            std::cout << "\nСмотреть записи дальше? 1 - продолжаем просмотр, 2 - отказ от просмотра\n";
             std::cin >> answer;
 
             while(answer != 1 && answer != 2){
@@ -133,6 +146,7 @@ void print_list(ListNode* head){
 
             if(answer == 1){
                 record_counter = 0;
+                page_number++; 
             }
 
             if(answer == 2){
@@ -203,7 +217,7 @@ ListNode* nodefrom_thebeginning_list(ListNode*& list){
 
 void merging_of_series(ListNode*& a, int q, ListNode*& b, int r, Queue& c){
     while (q > 0 && r > 0 && a != nullptr && b != nullptr){
-        if (street_comparison_house_number(a->data, b->data) <= 0) {
+        if (street_comparison_house_number(a->data, b->data) <= 0) { //эл из а <= из b
             ListNode* node = nodefrom_thebeginning_list(a);
             add_node_queue(c, node);
             q--;
@@ -214,6 +228,7 @@ void merging_of_series(ListNode*& a, int q, ListNode*& b, int r, Queue& c){
         }
     }
     
+    //докладываем оставш. эл из а
     while (q > 0 && a != nullptr) {
         ListNode* node = nodefrom_thebeginning_list(a);
         add_node_queue(c, node);
@@ -255,7 +270,7 @@ void split_list(ListNode* S, ListNode*& a, ListNode*& b){
             add_to_end(b, node);
         }
 
-        flag_add_to_a = false;
+        flag_add_to_a = !flag_add_to_a;
     }
 }
 
@@ -268,7 +283,7 @@ void mergeSort(ListNode*& S, int n) {
     queue_init(c0);
     queue_init(c1);
 
-    int p = 1;
+    int p = 1; 
     
     while (p < n) {
         queue_init(c0);
@@ -279,12 +294,12 @@ void mergeSort(ListNode*& S, int n) {
 
         while (m > 0) {
             
-            int q;
+            int q;//размер серии из списка а
             if (m >= p) { q = p; } else { q = m; }
             
             m = m - q;
 
-            int r;
+            int r;//размер серии из списка b
             if (m >= p) { r = p; } else { r = m; }
             
             m = m - r;
@@ -310,7 +325,4 @@ void mergeSort(ListNode*& S, int n) {
 
     S = c0.head;
 
-    c0.tail->next = nullptr;
-    
-    S = c0.head;
 }
