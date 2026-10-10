@@ -326,3 +326,19 @@ void mergeSort(ListNode*& S, int n) {
     S = c0.head;
 
 }
+
+int compareFirst_Chars(const char* str1, const char* str2, int n){
+    for(int i = 0; i < n; i++){
+        if(str1[i] == '\0' && str2[i] == '\0'){
+            return 0;
+
+        }else if(str1[i] == '\0'){
+            return -(unsigned char)str2[i];
+        }else if (str2[i] == '\0'){
+           return (unsigned char)str1[i];
+        }else if (str1[i] != str2[i]){
+           return (unsigned char)str1[i] - (unsigned char)str2[i]; 
+        }    
+    }
+    return 0;
+}
