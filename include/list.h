@@ -26,5 +26,6 @@ void merging_of_series(ListNode*& a, int q, ListNode*& b, int r, Queue& c);
 void add_to_end(ListNode*& list, ListNode* node);
 void split_list(ListNode* S, ListNode*& a, ListNode*& b);
 void mergeSort(ListNode*& S, int n);
+int compareFirst_Chars(const char* str1, const char* str2, int n);
 
 #endif
