@@ -25,10 +25,19 @@ int main() {
     }
     
     std::cout << "Файл успешно прочитан. В список добавлено " << count << " записей\n";
+    std::cout << "\n";
     
 
     fclose(file);
     mergeSort(head, 4000);
+
+    ListNode** index_array = new ListNode*[4000];
+    ListNode* temp = head;
+    for(int i = 0; i < 4000; i++){
+        index_array[i] = temp;
+        temp = temp -> next;
+    }
+
     print_list(head);
     memory_clear(head);
 
