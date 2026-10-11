@@ -38,8 +38,44 @@ int main() {
         temp = temp -> next;
     }
 
+    char key_search_utf8[100];
+    std::cout << "Введите первые 3 буквы улицы для поиска: ";
+    std::cin >> key_search_utf8;
+
+    char key_search_cp866[4]; 
+    utf8_to_cp866_prefix(key_search_utf8, key_search_cp866);
+
+    Queue result_queue;
+    queue_init(result_queue);
+
+    collect_to_queue(index_array, 4000, key_search_cp866, result_queue);
+
+    std::cout << "\n--- Результаты поиска ---\n";
+    ListNode* current = result_queue.head;
+    int found_count = 0;
+
+    while(current != nullptr){
+        found_count++;
+        std::cout << found_count << ". ";
+        transcodingCP866_for_UTF8(current->data.name, 32);
+        std::cout << "\t";
+        transcodingCP866_for_UTF8(current->data.street, 18);
+        std::cout << "\t";
+        std::cout << current->data.number_house << "\t";
+        std::cout << current->data.apartment << "\t";
+        transcodingCP866_for_UTF8(current->data.date_of_settlement, 10);
+        std::cout << "\n";
+        current = current->next;
+    }
+    
+    if(found_count == 0) {
+        std::cout << "Ничего не найдено.\n";
+    }
+
     print_list(head);
     memory_clear(head);
+
+    delete[] index_array;
 
     return 0;
 }
