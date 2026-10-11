@@ -28,5 +28,7 @@ void split_list(ListNode* S, ListNode*& a, ListNode*& b);
 void mergeSort(ListNode*& S, int n);
 int compareFirst_Chars(const char* str1, const char* str2, int n);
 int binary_search(ListNode** index_array, int n, const char* key_search);
+int collect_to_queue(ListNode** index_array, int n, const char* key_search, Queue& result_queue);
+void utf8_to_cp866_prefix(const char* utf8_str, char* cp866_out);
 
 #endif
