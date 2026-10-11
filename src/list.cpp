@@ -364,3 +364,63 @@ int binary_search(ListNode** index_array, int n, const char* key_search){
     }
 
 }
+
+int collect_to_queue(ListNode** index_array, int n, const char* key_search, Queue& result_queue){
+    queue_init(result_queue);
+    int start_index = binary_search(index_array, n, key_search);
+
+    if (start_index == -1) {
+        return 0; 
+    }
+
+    int count = 0;         
+    int i = start_index; 
+
+    while (i < n && compareFirst_Chars(index_array[i]->data.street, key_search, 3) == 0) {
+        
+        ListNode* newNode = new ListNode;
+        newNode->data = index_array[i]->data;
+        newNode->next = nullptr;
+        
+        add_node_queue(result_queue, newNode);
+        
+        count++;
+        i++;
+    }
+    
+    return count;
+}
+
+void utf8_to_cp866_prefix(const char* utf8_str, char* cp866_out) {
+    int out_idx = 0;
+    for (int i = 0; utf8_str[i] != '\0' && out_idx < 3; ) {
+        unsigned char c1 = (unsigned char)utf8_str[i];
+        unsigned char c2 = (unsigned char)utf8_str[i+1];
+        
+        // Заглавные А-Я и строчные а-п 
+        if (c1 == 0xD0 && c2 >= 0x90 && c2 <= 0xBF) {
+            cp866_out[out_idx++] = c2 - 0x10; 
+            i += 2;
+        } 
+        // Строчные р-я 
+        else if (c1 == 0xD1 && c2 >= 0x80 && c2 <= 0x8F) {
+            cp866_out[out_idx++] = c2 + 0x60; 
+            i += 2;
+        } 
+        // Буква Ё
+        else if (c1 == 0xD0 && c2 == 0x81) {
+            cp866_out[out_idx++] = 0xF0; 
+            i += 2;
+        } 
+        // Буква ё
+        else if (c1 == 0xD1 && c2 == 0x91) {
+            cp866_out[out_idx++] = 0xF1; 
+            i += 2;
+        } 
+        else {
+            cp866_out[out_idx++] = c1;
+            i++;
+        }
+    }
+    cp866_out[out_idx] = '\0'; 
+}
