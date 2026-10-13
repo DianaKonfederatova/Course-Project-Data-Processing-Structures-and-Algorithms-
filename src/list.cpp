@@ -397,14 +397,19 @@ void utf8_to_cp866_prefix(const char* utf8_str, char* cp866_out) {
         unsigned char c1 = (unsigned char)utf8_str[i];
         unsigned char c2 = (unsigned char)utf8_str[i+1];
         
-        // Заглавные А-Я и строчные а-п 
+        // Заглавные А-П и строчные а-п 
         if (c1 == 0xD0 && c2 >= 0x90 && c2 <= 0xBF) {
             cp866_out[out_idx++] = c2 - 0x10; 
             i += 2;
         } 
-        // Строчные р-я 
+        // Заглавные Р-Я
         else if (c1 == 0xD1 && c2 >= 0x80 && c2 <= 0x8F) {
             cp866_out[out_idx++] = c2 + 0x60; 
+            i += 2;
+        } 
+        //Строчные р-я
+        else if (c1 == 0xD1 && c2 >= 0x90 && c2 <= 0x9F) {
+            cp866_out[out_idx++] = c2; 
             i += 2;
         } 
         // Буква Ё
