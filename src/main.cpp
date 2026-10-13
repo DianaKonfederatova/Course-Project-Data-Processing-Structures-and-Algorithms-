@@ -48,9 +48,10 @@ int main() {
     Queue result_queue;
     queue_init(result_queue);
 
-    collect_to_queue(index_array, 4000, key_search_cp866, result_queue);
+    int found_count_people = collect_to_queue(index_array, 4000, key_search_cp866, result_queue);
 
     std::cout << "\n--- Результаты поиска ---\n";
+    std::cout << "Найдено записей: " << found_count_people << "\n\n";
     ListNode* current = result_queue.head;
     int found_count = 0;
 
