@@ -144,3 +144,28 @@ void print_tree(vertex* p){
 
     print_tree(p->right);
 }
+
+void tree_search(vertex* p, const char* search_name){
+
+    while(p != nullptr){
+        int result_comp = compareStrings(p ->adr.name, search_name);
+
+        if(result_comp == 0){
+            break;
+        }else if (result_comp > 0){
+            p = p -> left;
+        }else{
+            p = p -> right;
+        }
+    }
+    
+    if(p == nullptr){
+        std::cout << "Не найдено\n";
+    }else{
+        std::cout << "Найдено: ";
+        transcodingCP866_for_UTF8(p->adr.name, 32);
+        std::cout << "\n";
+    }
+
+    
+}
