@@ -2,6 +2,7 @@
 #include <cstdio>
 #include "database.h"
 #include "list.h"
+#include "tree.h"
 
 int main() {
     
@@ -26,10 +27,14 @@ int main() {
     
     std::cout << "Файл успешно прочитан. В список добавлено " << count << " записей\n";
     std::cout << "\n";
-    
-
     fclose(file);
+
     mergeSort(head, 4000);
+    std::cout << "Данные упорядочены.\n\n";
+
+    std::cout << "=== ПРОСМОТР БАЗЫ ДАННЫХ ===\n";
+    print_list(head);
+    std::cout << "\n";
 
     ListNode** index_array = new ListNode*[4000];
     ListNode* temp = head;
@@ -52,6 +57,7 @@ int main() {
 
     std::cout << "\n--- Результаты поиска ---\n";
     std::cout << "Найдено записей: " << found_count_people << "\n\n";
+
     ListNode* current = result_queue.head;
     int found_count = 0;
 
@@ -73,9 +79,29 @@ int main() {
         std::cout << "Ничего не найдено.\n";
     }
 
-    print_list(head);
-    memory_clear(head);
+    vertex* tree_root = nullptr;
+    bool Rost = false;
+    int tree_size = 0;
+    current = result_queue.head;
 
+    while(current != nullptr){
+        Rost = false;
+        add_AVL(current -> data, tree_root, Rost);
+        tree_size++;
+        current = current -> next;
+    }
+
+    std::cout << "\n========ВЫВОД АВЛ-ДЕРЕВА:========\n";
+    print_tree(tree_root);
+    std::cout << "\nРазмер дерева: " << tree_size << " узлов\n";
+
+    short search_apartment;
+    std::cout << "Введите номер квартиры для поиска в дереве: ";
+    std::cin >> search_apartment;
+    tree_search(tree_root, search_apartment);
+
+    clear_tree(tree_root);
+    memory_clear(head);
     delete[] index_array;
 
     return 0;

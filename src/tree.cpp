@@ -2,6 +2,18 @@
 #include "tree.h"
 #include "list.h"
 
+int apartment_comparison(short int apart1, short int apart2){
+    if(apart1 < apart2){
+        return -1;
+    }else if (apart1 > apart2)
+    {
+        return 1;
+    }else{
+        return 0;
+    }
+    
+}
+
 void add_AVL(const addresses& D, vertex*& p, bool& Rost){
 
     if(p == NULL){
@@ -15,7 +27,7 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
 
     }
     
-    else if (compareStrings(p ->adr.name, D.name) > 0){
+    else if (apartment_comparison(p ->adr.apartment, D.apartment) > 0){
         add_AVL(D, p -> left, Rost);
 
             if(Rost == true){
@@ -71,7 +83,7 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
                 }
             }
     }
-    else if (compareStrings(p ->adr.name, D.name) < 0){
+    else if (apartment_comparison(p ->adr.apartment, D.apartment) <= 0){
         add_AVL(D, p -> right, Rost);
 
         if(Rost == true){
@@ -132,40 +144,44 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
 
 void print_tree(vertex* p){
 
+   if (p == nullptr){
+        return;
+    }
+    print_tree(p->left);
+    std::cout << "Bal: " << p->Bal << " | Apt: " << p->adr.apartment << " | ";
+    transcodingCP866_for_UTF8(p->adr.name, 32);
+    std::cout << "\n";
+    print_tree(p->right);
+
+}
+
+void tree_search(vertex* p, short search_apartment){
+
+   if (p == nullptr){
+        return;
+    }
+    
+    tree_search(p->left, search_apartment);
+    
+    if (p->adr.apartment == search_apartment){
+        transcodingCP866_for_UTF8(p->adr.name, 32);
+        std::cout << "\t";
+        transcodingCP866_for_UTF8(p->adr.street, 18);
+        std::cout << "\t";
+        std::cout << p->adr.number_house << "\t";
+        std::cout << p->adr.apartment << "\t";
+        transcodingCP866_for_UTF8(p->adr.date_of_settlement, 10);
+        std::cout << "\n";
+    }
+    
+    tree_search(p->right, search_apartment);
+}
+
+void clear_tree(vertex* p){
     if (p == nullptr){
         return;
     }
-
-    print_tree(p->left);
-
-    std::cout << "Bal: " << p->Bal << " | ";
-    transcodingCP866_for_UTF8(p->adr.name, 32);
-    std::cout << "\n";
-
-    print_tree(p->right);
-}
-
-void tree_search(vertex* p, const char* search_name){
-
-    while(p != nullptr){
-        int result_comp = compareStrings(p ->adr.name, search_name);
-
-        if(result_comp == 0){
-            break;
-        }else if (result_comp > 0){
-            p = p -> left;
-        }else{
-            p = p -> right;
-        }
-    }
-    
-    if(p == nullptr){
-        std::cout << "Не найдено\n";
-    }else{
-        std::cout << "Найдено: ";
-        transcodingCP866_for_UTF8(p->adr.name, 32);
-        std::cout << "\n";
-    }
-
-    
+    clear_tree(p->left);
+    clear_tree(p->right);
+    delete p;
 }
