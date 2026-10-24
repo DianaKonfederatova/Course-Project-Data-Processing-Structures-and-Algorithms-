@@ -1,0 +1,17 @@
+#ifndef TREE_H
+#define TREE_H
+
+#include <database.h>
+#include <iostream>
+#include <fstream>
+
+struct vertex{
+
+    int Bal = 0;
+    addresses adr;
+    vertex* left;
+    vertex* right;
+
+};
+
+#endif 
