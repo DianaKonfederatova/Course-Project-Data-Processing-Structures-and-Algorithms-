@@ -14,4 +14,6 @@ struct vertex{
 
 };
 
+void add_AVL(const addresses& D, vertex*& p, bool& Rost);
+
 #endif 
