@@ -100,7 +100,7 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
                     Rost = false;
 
                 }else{
-                    
+
                     vertex* q = p -> right;
                     vertex* r = q -> left;
 
@@ -128,4 +128,19 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
             } 
         }
     } 
+}
+
+void print_tree(vertex* p){
+
+    if (p == nullptr){
+        return;
+    }
+
+    print_tree(p->left);
+
+    std::cout << "Bal: " << p->Bal << " | ";
+    transcodingCP866_for_UTF8(p->adr.name, 32);
+    std::cout << "\n";
+
+    print_tree(p->right);
 }
