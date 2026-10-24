@@ -16,6 +16,6 @@ struct vertex{
 
 void add_AVL(const addresses& D, vertex*& p, bool& Rost);
 void print_tree(vertex* p);
-void tree_search(vetrex* p, const char* search_name);
+void tree_search(vertex* p, const char* search_name);
 
 #endif 
