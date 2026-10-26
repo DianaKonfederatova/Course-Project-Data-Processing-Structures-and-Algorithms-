@@ -22,6 +22,7 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
         p -> adr = D;
         p -> left = NULL;
         p -> right = NULL;
+        p->mid = NULL;
         p -> Bal = 0;
         Rost = true;
 
@@ -83,7 +84,7 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
                 }
             }
     }
-    else if (apartment_comparison(p ->adr.apartment, D.apartment) <= 0){
+    else if (apartment_comparison(p ->adr.apartment, D.apartment) < 0){
         add_AVL(D, p -> right, Rost);
 
         if(Rost == true){
@@ -139,7 +140,18 @@ void add_AVL(const addresses& D, vertex*& p, bool& Rost){
                 }
             } 
         }
-    } 
+    }else if(apartment_comparison(p ->adr.apartment, D.apartment) == 0){
+        vertex* new_node = new vertex;
+        new_node -> adr = D;
+        new_node -> right = NULL;
+        new_node -> left = NULL;
+        new_node -> Bal = 0;
+
+        new_node -> mid = p -> mid;
+        p -> mid = new_node;
+
+        Rost = false;
+    }
 }
 
 void print_tree(vertex* p){
@@ -147,34 +159,48 @@ void print_tree(vertex* p){
    if (p == nullptr){
         return;
     }
+
     print_tree(p->left);
-    std::cout << "Bal: " << p->Bal << " | Apt: " << p->adr.apartment << " | ";
-    transcodingCP866_for_UTF8(p->adr.name, 32);
-    std::cout << "\n";
+    vertex* curr = p;
+
+    while (curr != nullptr){
+        std::cout << "Bal: " << p->Bal << " | Apt: " << curr->adr.apartment << " | ";
+        transcodingCP866_for_UTF8(curr->adr.name, 32);
+        std::cout << "\n";
+        curr = curr->mid;
+    }
+    
     print_tree(p->right);
 
 }
 
 void tree_search(vertex* p, short search_apartment){
 
-   if (p == nullptr){
+    if (p == nullptr){
         return;
     }
     
-    tree_search(p->left, search_apartment);
+    int comp = apartment_comparison(p->adr.apartment, search_apartment);
     
-    if (p->adr.apartment == search_apartment){
-        transcodingCP866_for_UTF8(p->adr.name, 32);
-        std::cout << "\t";
-        transcodingCP866_for_UTF8(p->adr.street, 18);
-        std::cout << "\t";
-        std::cout << p->adr.number_house << "\t";
-        std::cout << p->adr.apartment << "\t";
-        transcodingCP866_for_UTF8(p->adr.date_of_settlement, 10);
-        std::cout << "\n";
+    if(comp > 0){
+        tree_search(p->left, search_apartment);
+    }else if (comp < 0){
+        tree_search(p->right, search_apartment);
+    }else{
+        vertex* cur = p;
+        while (cur != nullptr) {
+            transcodingCP866_for_UTF8(cur->adr.name, 32);
+            std::cout << "\t";
+            transcodingCP866_for_UTF8(cur->adr.street, 18);
+            std::cout << "\t";
+            std::cout << cur->adr.number_house << "\t";
+            std::cout << cur->adr.apartment << "\t";
+            transcodingCP866_for_UTF8(cur->adr.date_of_settlement, 10);
+            std::cout << "\n";
+            
+            cur = cur->mid; 
+        }
     }
-    
-    tree_search(p->right, search_apartment);
 }
 
 void clear_tree(vertex* p){
@@ -183,5 +209,13 @@ void clear_tree(vertex* p){
     }
     clear_tree(p->left);
     clear_tree(p->right);
+
+    vertex* current = p->mid;
+    while (current != nullptr) {
+        vertex* next = current->mid;
+        delete current;
+        current = next;
+    }
+
     delete p;
 }
